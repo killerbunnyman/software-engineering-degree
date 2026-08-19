@@ -1,0 +1,139 @@
+# Jogo da Velha completo:
+# - Multiplayer
+# - Contra máquina
+# - Mostra posições (0 a 8)
+# - Permite jogar novamente ou encerrar
+
+import random
+
+# Função para criar um tabuleiro novo (importante para reiniciar o jogo)
+def novo_tabuleiro():
+    return [" " for _ in range(9)]
+
+# Mostra o tabuleiro + guia
+def mostrar_tabuleiro(tabuleiro):
+    print("\nTABULEIRO:")
+    print(f" {tabuleiro[0]} | {tabuleiro[1]} | {tabuleiro[2]}      0 | 1 | 2")
+    print("---+---+---    ---+---+---")
+    print(f" {tabuleiro[3]} | {tabuleiro[4]} | {tabuleiro[5]}      3 | 4 | 5")
+    print("---+---+---    ---+---+---")
+    print(f" {tabuleiro[6]} | {tabuleiro[7]} | {tabuleiro[8]}      6 | 7 | 8\n")
+
+# Verifica vitória
+def verificar_vitoria(tabuleiro, jogador):
+    combinacoes = [
+        (0,1,2), (3,4,5), (6,7,8),
+        (0,3,6), (1,4,7), (2,5,8),
+        (0,4,8), (2,4,6)
+    ]
+    
+    for a, b, c in combinacoes:
+        if tabuleiro[a] == tabuleiro[b] == tabuleiro[c] == jogador:
+            return True
+    return False
+
+# Verifica empate
+def verificar_empate(tabuleiro):
+    return " " not in tabuleiro
+
+# Jogada da máquina
+def jogada_maquina(tabuleiro):
+    livres = [i for i in range(9) if tabuleiro[i] == " "]
+    return random.choice(livres)
+
+# Multiplayer
+def modo_multiplayer():
+    tabuleiro = novo_tabuleiro()
+    jogador = "X"
+    
+    while True:
+        mostrar_tabuleiro(tabuleiro)
+        print(f"Vez do jogador {jogador}")
+        
+        pos = int(input("Escolha uma posição (0 a 8): "))
+        
+        if pos < 0 or pos > 8 or tabuleiro[pos] != " ":
+            print("Posição inválida!")
+            continue
+        
+        tabuleiro[pos] = jogador
+        
+        if verificar_vitoria(tabuleiro, jogador):
+            mostrar_tabuleiro(tabuleiro)
+            print(f"🎉 Jogador {jogador} venceu!")
+            break
+        
+        if verificar_empate(tabuleiro):
+            mostrar_tabuleiro(tabuleiro)
+            print("😐 Empate!")
+            break
+        
+        jogador = "O" if jogador == "X" else "X"
+
+# Contra máquina
+def modo_maquina():
+    tabuleiro = novo_tabuleiro()
+    jogador = "X"
+    maquina = "O"
+    
+    while True:
+        mostrar_tabuleiro(tabuleiro)
+        
+        print("Sua vez (X)")
+        pos = int(input("Escolha uma posição (0 a 8): "))
+        
+        if pos < 0 or pos > 8 or tabuleiro[pos] != " ":
+            print("Posição inválida!")
+            continue
+        
+        tabuleiro[pos] = jogador
+        
+        if verificar_vitoria(tabuleiro, jogador):
+            mostrar_tabuleiro(tabuleiro)
+            print("🎉 Você venceu!")
+            break
+        
+        if verificar_empate(tabuleiro):
+            mostrar_tabuleiro(tabuleiro)
+            print("😐 Empate!")
+            break
+        
+        pos_maquina = jogada_maquina(tabuleiro)
+        print(f"Máquina escolheu: {pos_maquina}")
+        tabuleiro[pos_maquina] = maquina
+        
+        if verificar_vitoria(tabuleiro, maquina):
+            mostrar_tabuleiro(tabuleiro)
+            print("🤖 Máquina venceu!")
+            break
+        
+        if verificar_empate(tabuleiro):
+            mostrar_tabuleiro(tabuleiro)
+            print("😐 Empate!")
+            break
+
+# Menu principal
+def menu():
+    print("=== JOGO DA VELHA ===")
+    print("1 - Jogar contra outro jogador")
+    print("2 - Jogar contra a máquina")
+    
+    opcao = input("Escolha uma opção: ")
+    
+    if opcao == "1":
+        modo_multiplayer()
+    elif opcao == "2":
+        modo_maquina()
+    else:
+        print("Opção inválida!")
+
+# Loop principal para jogar novamente
+while True:
+    menu()
+    
+    # Pergunta se quer jogar novamente
+    jogar_novamente = input("\nDeseja jogar novamente? (s/n): ").lower()
+    
+    if jogar_novamente != 's':
+        print("Obrigado por jogar! 👋")
+        break
