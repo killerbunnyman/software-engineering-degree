@@ -1,0 +1,3 @@
+This repository contains a collection of academic projects and assignments developed throughout my Software Engineering degree. It includes practical exercises, programming projects, system development activities, and other coursework focused on developing my technical and problem-solving skills.
+
+One of the main projects featured in this repository is a Tic-Tac-Toe game, developed as part of my programming studies. The project focuses on implementing game logic, user interaction, conditional structures, functions, and input validation, providing practical experience with the fundamentals of software development.
